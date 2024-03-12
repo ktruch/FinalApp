@@ -11,7 +11,10 @@ class Settings(BaseSettings):
     app_name: str = "Full Stack PDF CRUD App"
     AWS_KEY: str
     AWS_SECRET: str
-    AWS_S3_BUCKET: str = "pdf-basic-app-bucket"
+    # AWS_S3_BUCKET: str = "pdf-basic-app-bucket"
+    AWS_S3_BUCKET: str = "ai-app-bucket"
+    
+
 
     @staticmethod
     def get_s3_client():
