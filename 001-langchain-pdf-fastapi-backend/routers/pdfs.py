@@ -7,8 +7,9 @@ from database import SessionLocal
 from uuid import uuid4
 
 # Necessary imports for langchain summarization
-from langchain import OpenAI, PromptTemplate
+from langchain import PromptTemplate
 from langchain.chains import LLMChain
+from langchain.llms import Replicate
 
 # Necessary imports to chat with a PDF file
 from langchain.document_loaders import PyPDFLoader
@@ -17,7 +18,24 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from schemas import QuestionRequest
-llm = OpenAI()
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+replicate_api_token = os.environ['REPLICATE_API_TOKEN']
+
+replicate_id = "meta/llama-2-13b-chat:f4e2de70d66816a838a89eeeb621910adffb0dd0baba3976c96980970978018d"
+
+llm = Replicate(
+    model=replicate_id,
+    input={})
+
+langchain_llm = Replicate(
+    model=replicate_id,
+    input={"temperature": 0.00,
+            "max_length": 500,
+            "top_p": 1})
 
 router = APIRouter(prefix="/pdfs")
 
@@ -63,7 +81,8 @@ def delete_pdf(id: int, db: Session = Depends(get_db)):
 
 
 # LANGCHAIN
-langchain_llm = OpenAI(temperature=0)
+# langchain_llm = OpenAI(temperature=0)
+
 
 summarize_template_string = """
         Provide a summary for the following text:
